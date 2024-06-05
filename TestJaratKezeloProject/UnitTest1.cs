@@ -134,9 +134,7 @@ namespace TestJaratKezeloProject
         public void OsszesKesesNemLehetNegativ()
         {
 
-
             jaratok.UjJarat("szam", "repterhonnan", "repterhova", vmikor);
-            jaratok.Keses("szam", -30);
             //            Assert.Throws<NegativKesesException>(() => { jaratok.Keses("szam", -30); });
             //?? nem eszi meg a custom exceptionomet
             Assert.Throws<ArgumentException>(() => { jaratok.Keses("szam", -30); });
@@ -157,31 +155,24 @@ namespace TestJaratKezeloProject
         [Test]
         public void MikorIndulJoSzamotAdVissza()
         {
-             DateTime indulas = vmikor;
+            DateTime indulas = vmikor;
             jaratok.UjJarat("szam", "repterhonnan", "repterhova", indulas);
-            if (!(jaratok.MikorIndul("szam") == vmikor)) { Assert.Fail(); }
-            jaratok.Keses("szam", 20);
-            indulas.AddMinutes(20);
-            if (!(jaratok.MikorIndul("szam") == indulas)) { Assert.Fail(); }
-
-        /*    jaratok.Keses("szam", -10);
-            indulas.AddMinutes(-10);
-            if (!(jaratok.MikorIndul("szam") == indulas)) { Assert.Fail(); }
-           */ Assert.Pass();
-            //ezt sok esetre lehet tesztelni
+            jaratok.Keses("szam", 42);
+            indulas= indulas.AddMinutes(Convert.ToDouble(42));
+            Assert.That(jaratok.MikorIndul("szam") == indulas);
         }
         [Test]
         public void InvalidJaratszamhozMikorindulHibatDob()
         {
-            Assert.Throws<ArgumentException>(() => { jaratok.MikorIndul("szam"); });
+            Assert.Throws<ArgumentException>(() => { jaratok.MikorIndul(":("); });
         }
         //JaratokRepuloterrol függvény
         /*Azon  járatok  járatszámát  adja  vissza
          * ,  amelyek  a  paraméterben  megadott  nevû repülõtérrõl indulnak.
-         1. üres listát vissza tud adni
-         2. Egy elemû listát vissza tud adni
-        3. Egynél több elemû listát vissza tud adni
-        4. Kihagyja azokat a járatokat, amik nem tartoznak a reptérhez*/
+         1. Egy elemû listát vissza tud adni
+        2. Egynél több elemû listát vissza tud adni
+        3. Kihagyja azokat a járatokat, amik nem tartoznak a reptérhez*/
+
         [Test]
         public void JaratokRepuloterrolUreslista()
         {
@@ -191,8 +182,8 @@ namespace TestJaratKezeloProject
         public void JaratokRepuloterrolEgyElem()
         {
             jaratok.UjJarat("elso", "repterhonnan", "repterhova", vmikor);
-            Assert.That(jaratok.JaratokRepuloterrol("repterhonnan").Count == 0 
-                        && jaratok.JaratokRepuloterrol("repterhonnan")[0] == "elso");
+            Assert.That(jaratok.JaratokRepuloterrol("repterhonnan").Count == 1
+						&& jaratok.JaratokRepuloterrol("repterhonnan")[0] == "elso");
         }  
         [Test]
         public void JaratokRepuloterrolTobbElem()
@@ -200,9 +191,8 @@ namespace TestJaratKezeloProject
             jaratok.UjJarat("elso", "repterhonnan", "repterhova", vmikor);
             jaratok.UjJarat("masodik", "repterhonnan", "repterhova", vmikor);
             List<string> lekerdezettLista = jaratok.JaratokRepuloterrol("repterhonnan");
-            if (lekerdezettLista.Count !=2){ Assert.Fail(); }
-            if (!lekerdezettLista.Contains("elso")){ Assert.Fail(); }
-            if (!lekerdezettLista.Contains("masodik")){ Assert.Fail(); }
+            Assert.That(lekerdezettLista.Count == 2 && lekerdezettLista.Contains("elso") && lekerdezettLista.Contains("masodik"));
+
             Assert.Pass();
         }
         [Test]

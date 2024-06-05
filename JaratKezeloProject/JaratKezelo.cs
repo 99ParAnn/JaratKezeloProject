@@ -39,10 +39,9 @@
             {
                 i++;
             }
-            if (i<jaratLista.Count)
+            if (i<jaratLista.Count && jaratLista[i].keses + keses >=0)
             {
                 jaratLista[i].keses += keses;
-                
             }
             else
             {
@@ -55,7 +54,7 @@
         {
             int i = -1;
             bool megtalaltuk = false;
-            while (i < jaratLista.Count && !megtalaltuk)
+            while (i < jaratLista.Count-1 && !megtalaltuk)
             {
                 i++;
                 megtalaltuk = jaratLista[i].jaratSzam == jaratSzam;
@@ -72,7 +71,15 @@
         }
         public List<string> JaratokRepuloterrol(string repter)
         {
-            throw new NotImplementedException();
+            List<string> output = new List<string>();
+            foreach (Jarat vizsgalt in this.jaratLista)
+            {
+                if (vizsgalt.honnanRepter == repter)
+                {
+                    output.Add(vizsgalt.jaratSzam);
+                }
+			}
+            return output;
         }
     }
 }
